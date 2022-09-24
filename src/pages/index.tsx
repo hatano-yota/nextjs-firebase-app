@@ -1,9 +1,12 @@
 import React from "react";
 import Head from "next/head";
+import Link from "next/link";
 import Image from "next/image";
+import { useAuthentication } from "../hooks/authentication";
 import styles from "../styles/Home.module.css";
 
 export default function Home() {
+  const { user } = useAuthentication();
   return (
     <div className={styles.container}>
       <Head>
@@ -23,14 +26,13 @@ export default function Home() {
         </p>
 
         <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
+          <Link href="/page2">
+            <a>Go to page2</a>
+          </Link>
 
           <a href="https://nextjs.org/learn" className={styles.card}>
             <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
+            <p>{user?.uid || "未ログイン"}</p>
           </a>
 
           <a
