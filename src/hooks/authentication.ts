@@ -64,4 +64,3 @@ export function useAuthentication() {
 
   return { user };
 }
-// 2度呼ばれる～

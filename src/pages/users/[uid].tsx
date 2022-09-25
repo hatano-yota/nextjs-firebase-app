@@ -73,15 +73,14 @@ export default function UserShow() {
   }, [query.uid]);
 
   return (
-    <>
-      <Layout>
-        {user && (
-          <div className="text-center">
-            <h1 className="h4">{user.name}さんのページ</h1>
-            <div className="m-5">{user.name}さんに質問しよう！</div>
-          </div>
-        )}
-      </Layout>
+    <Layout>
+      {user && (
+        <div className="text-center">
+          <h1 className="h4">{user.name}さんのページ</h1>
+          <div className="m-5">{user.name}さんに質問しよう！</div>
+        </div>
+      )}
+
       <div className="row justify-content-center mb-3">
         <div className="col-12 col-md-6">
           <form onSubmit={onSubmit}>
@@ -107,7 +106,7 @@ export default function UserShow() {
           </form>
         </div>
       </div>
-    </>
+    </Layout>
   );
 }
 
