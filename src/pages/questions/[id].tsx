@@ -14,9 +14,9 @@ import {
   where,
 } from "firebase/firestore";
 import Layout from "../../components/Layout";
-import { Question } from "../../models/Question";
+import { Question } from "../../types/Question";
 import { useAuthentication } from "../../hooks/authentication";
-import { Answer } from "../../models/Answer";
+import { Answer } from "../../types/Answer";
 
 type Query = {
   id: string;
@@ -60,11 +60,7 @@ export default function QuestionsShow() {
     }
 
     const answerSnapshot = await getDocs(
-      query(
-        answersCollection,
-        where("questionId", "==", gotQuestion.id),
-        limit(1)
-      )
+      query(answersCollection, where("questionId", "==", gotQuestion.id), limit(1)),
     );
 
     if (answerSnapshot.empty) {
@@ -137,10 +133,7 @@ export default function QuestionsShow() {
                     ></textarea>
                     <div className="m-3">
                       {isSending ? (
-                        <div
-                          className="spinner-border text-secondary"
-                          role="status"
-                        ></div>
+                        <div className="spinner-border text-secondary" role="status"></div>
                       ) : (
                         <button type="submit" className="btn btn-primary">
                           回答する

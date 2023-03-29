@@ -12,7 +12,7 @@ import {
   where,
 } from "firebase/firestore";
 import { useAuthentication } from "../../hooks/authentication";
-import { Question } from "../../models/Question";
+import { Question } from "../../types/Question";
 import Layout from "../../components/Layout";
 import dayjs from "dayjs";
 import Link from "next/link";
@@ -29,7 +29,7 @@ export default function QuestionsReceived() {
       collection(db, "questions"),
       where("receiverUid", "==", user.uid),
       orderBy("createdAt", "desc"),
-      limit(10)
+      limit(10),
     );
   }
 
@@ -78,9 +78,7 @@ export default function QuestionsReceived() {
     }
 
     const lastQuestion = questions[questions.length - 1];
-    const snapshot = await getDocs(
-      query(createBaseQuery(), startAfter(lastQuestion.createdAt))
-    );
+    const snapshot = await getDocs(query(createBaseQuery(), startAfter(lastQuestion.createdAt)));
     if (snapshot.empty) {
       return;
     }
@@ -120,9 +118,7 @@ export default function QuestionsReceived() {
                     <div className="text-truncate">{question.body}</div>
                     <div>
                       <small className="text-muted text-end">
-                        {dayjs(question.createdAt.toDate()).format(
-                          "YYYY/MM/DD HH:mm"
-                        )}
+                        {dayjs(question.createdAt.toDate()).format("YYYY/MM/DD HH:mm")}
                       </small>
                     </div>
                   </div>

@@ -1,21 +1,15 @@
 import { getAuth, onAuthStateChanged, signInAnonymously } from "firebase/auth";
-import { User } from "../models/User";
+import { User } from "../types/User";
 import { atom, useRecoilState } from "recoil";
 import { useEffect } from "react";
-import {
-  getFirestore,
-  collection,
-  doc,
-  getDoc,
-  setDoc,
-} from "firebase/firestore";
+import { getFirestore, collection, doc, getDoc, setDoc } from "firebase/firestore";
 
 const userState = atom<User>({
   key: "user",
   default: null,
 });
 
-async function createUserIfNotFound(user: User) {
+const createUserIfNotFound = async (user: User) => {
   const db = getFirestore();
   const usersCollection = collection(db, "users");
   const userRef = doc(usersCollection, user.uid);
@@ -28,9 +22,9 @@ async function createUserIfNotFound(user: User) {
   await setDoc(userRef, {
     name: "yota" + new Date().getTime(),
   });
-}
+};
 
-export function useAuthentication() {
+export const useAuthentication = () => {
   const [user, setUser] = useRecoilState(userState);
 
   useEffect(() => {
@@ -39,7 +33,7 @@ export function useAuthentication() {
     }
 
     const auth = getAuth();
-
+    console.log("start useEffect");
     signInAnonymously(auth).catch(function (error) {
       // Handle Errors here.
       console.error(error);
@@ -51,8 +45,8 @@ export function useAuthentication() {
         const loginUser: User = {
           uid: firebaseUser.uid,
           isAnonymous: firebaseUser.isAnonymous,
-          name: "",
         };
+        console.log("set user");
         setUser(loginUser);
         createUserIfNotFound(loginUser);
       } else {
@@ -60,7 +54,7 @@ export function useAuthentication() {
         setUser(null);
       }
     });
-  }, []);
+  }, [user, setUser]);
 
   return { user };
-}
+};
