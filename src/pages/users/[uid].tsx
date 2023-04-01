@@ -16,7 +16,7 @@ const UserShow = () => {
   const { user: currentUser } = useAuthentication();
   const [body, setBody] = useState("");
   const [isSending, setIsSending] = useState(false);
-
+  
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

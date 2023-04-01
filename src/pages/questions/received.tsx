@@ -17,13 +17,13 @@ import Layout from "../../components/Layout";
 import dayjs from "dayjs";
 import Link from "next/link";
 
-export default function QuestionsReceived() {
+const QuestionsReceived = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const { user } = useAuthentication();
   const [isPaginationFinished, setIsPaginationFinished] = useState(false);
   const scrollContainerRef = useRef(null);
 
-  function createBaseQuery() {
+  const createBaseQuery = () => {
     const db = getFirestore();
     return query(
       collection(db, "questions"),
@@ -31,18 +31,18 @@ export default function QuestionsReceived() {
       orderBy("createdAt", "desc"),
       limit(10),
     );
-  }
+  };
 
-  function appendQuestions(snapshot: QuerySnapshot<DocumentData>) {
+  const appendQuestions = (snapshot: QuerySnapshot<DocumentData>) => {
     const gotQuestions = snapshot.docs.map((doc) => {
       const question = doc.data() as Question;
       question.id = doc.id;
       return question;
     });
     setQuestions(questions.concat(gotQuestions));
-  }
+  };
 
-  async function loadQuestions() {
+  const loadQuestions = async () => {
     const snapshot = await getDocs(createBaseQuery());
 
     if (snapshot.empty) {
@@ -52,9 +52,9 @@ export default function QuestionsReceived() {
     }
 
     appendQuestions(snapshot);
-  }
+  };
 
-  function onScroll() {
+  const onScroll = () => {
     if (isPaginationFinished) {
       return;
     }
@@ -70,9 +70,9 @@ export default function QuestionsReceived() {
     }
 
     loadNextQuestions();
-  }
+  };
 
-  async function loadNextQuestions() {
+  const loadNextQuestions = async () => {
     if (questions.length === 0) {
       return;
     }
@@ -84,7 +84,7 @@ export default function QuestionsReceived() {
     }
 
     appendQuestions(snapshot);
-  }
+  };
 
   useEffect(() => {
     window.addEventListener("scroll", onScroll);
@@ -94,7 +94,7 @@ export default function QuestionsReceived() {
   }, [questions, scrollContainerRef.current, isPaginationFinished]);
 
   useEffect(() => {
-    if (!typeof window) {
+    if (typeof window === 'undefined') {
       return;
     }
     if (user === null) {
@@ -103,7 +103,7 @@ export default function QuestionsReceived() {
     }
 
     loadQuestions();
-  }, [process.browser, user]);
+  }, [user]);
 
   return (
     <Layout>
@@ -130,4 +130,6 @@ export default function QuestionsReceived() {
       </div>
     </Layout>
   );
-}
+};
+
+export default QuestionsReceived;
